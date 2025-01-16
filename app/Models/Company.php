@@ -15,13 +15,6 @@ class Company extends Model implements HasMedia
 {
     use InteractsWithMedia;
 
-    protected static function booted(): void
-    {
-        static::created(function ($company) {
-            Mail::to('admin@admin.com')->send(new NewCompanyNotification($company));
-        });
-    }
-
     protected $fillable = [
         'name',
         'email',

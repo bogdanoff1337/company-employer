@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Company\StoreCompanyRequest;
 use App\Http\Requests\Company\UpdateCompanyRequest;
+use App\Mail\NewCompanyNotification;
 use App\Models\Company;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class CompanyController extends Controller
@@ -33,7 +35,10 @@ class CompanyController extends Controller
             if ($request->hasFile('logo')) {
                 $company->addMedia($request->file('logo'))->toMediaCollection('company_logo');
             }
+
+            Mail::to('admin@example.com')->send(new NewCompanyNotification($company));
         });
+
 
         return redirect()->route('companies.index');
     }
